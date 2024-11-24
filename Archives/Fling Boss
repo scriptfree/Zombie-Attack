@@ -1,0 +1,46 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Function to make your character spin super fast
+local function spinCharacter()
+    -- Apply a high rotational speed to the character's HumanoidRootPart
+    while true do
+        rootPart.CFrame = rootPart.CFrame * CFrame.Angles(0, math.rad(10), 0) -- Adjust speed as necessary
+        wait(0.01) -- Adjust the wait time for faster or slower spinning
+    end
+end
+
+-- Function to teleport to each object in the "BossFolder" and fling them
+local function teleportAndFlingBosses()
+    local bossFolder = workspace:FindFirstChild("BossFolder")
+    if not bossFolder then
+        warn("The 'BossFolder' folder does not exist!")
+        return
+    end
+
+    -- Teleport to each boss in the folder and fling them
+    for _, boss in pairs(bossFolder:GetChildren()) do
+        if boss:IsA("Model") and boss:FindFirstChild("HumanoidRootPart") then
+            -- Teleport to the boss
+            rootPart.CFrame = boss.HumanoidRootPart.CFrame * CFrame.new(0, 5, 0) -- Teleport above the boss
+
+            -- Fling the boss by applying a force (adjust values as needed)
+            local humanoid = boss:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+                local bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.MaxForce = Vector3.new(500000, 500000, 500000)
+                bodyVelocity.Velocity = (rootPart.Position - boss.HumanoidRootPart.Position).unit * 500 -- Fling speed
+                bodyVelocity.Parent = boss.HumanoidRootPart
+                game.Debris:AddItem(bodyVelocity, 0.5) -- Clean up after fling
+            end
+            wait(0.5) -- Adjust the wait time between teleporting to bosses
+        end
+    end
+end
+
+-- Start the spinning and teleporting/flying actions
+spawn(spinCharacter) -- Start the spinning in a new thread
+teleportAndFlingBosses()
