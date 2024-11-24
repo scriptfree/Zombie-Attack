@@ -106,7 +106,7 @@ Tab:AddToggle({
 
 Tab:AddSlider({
 	Name = "Walkspeed",
-	Min = 0,
+	Min = 16,
 	Max = 100,
 	Default = 16,
 	Color = Color3.fromRGB(255,255,255),
@@ -119,7 +119,7 @@ Tab:AddSlider({
 
 Tab:AddSlider({
 	Name = "Jump Power",
-	Min = 0,
+	Min = 50,
 	Max = 150,
 	Default = 50,
 	Color = Color3.fromRGB(255,255,255),
