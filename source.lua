@@ -3,9 +3,9 @@ local Window = OrionLib:MakeWindow({Name = "Manny's Script [V1.0]", HidePremium 
 
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+local rootPart = character:WaitForChild("HumanoidRootPart")
 
-local toggleActive = false
-
+-- Function to disable collisions for a model
 local function disableCollisions(model)
     for _, part in pairs(model:GetDescendants()) do
         if part:IsA("BasePart") then
@@ -16,23 +16,23 @@ end
 
 -- Function to bring all zombies to the player's character
 local function bringZombies()
-    local enemiesFolder = workspace:FindFirstChild("enemies") -- Lowercase "enemies"
+    local enemiesFolder = workspace:FindFirstChild("enemies") -- Make sure to use lowercase "enemies"
     if not enemiesFolder then
-        warn("enemies folder not found!")
+        warn("Enemies folder not found!")
         return
     end
 
+    -- Loop through each model in the enemies folder
     for _, zombie in pairs(enemiesFolder:GetChildren()) do
         if zombie:IsA("Model") and zombie:FindFirstChild("HumanoidRootPart") then
             -- Disable collisions for the zombie
             disableCollisions(zombie)
 
-            -- Move zombie to the front of the player's character
-            zombie.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+            -- Move zombie to the front of the player's character (adjust as needed)
+            zombie.HumanoidRootPart.CFrame = rootPart.CFrame * CFrame.new(0, 0, -5) -- Bring the zombie in front of the player
         end
     end
 end
-
 
 OrionLib:MakeNotification({
 	Name = "Notification",
